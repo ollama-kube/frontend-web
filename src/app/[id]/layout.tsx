@@ -12,7 +12,14 @@ export default function Layout({
     children: React.ReactNode;
 }>) {
 
+
+
+
     return <>
-        { children }
+        {children}
     </>
 }
+
+//  https://vercel.com/blog/introducing-the-vercel-ai-sdk
+//  https://ollama.com/blog/openai-compatibility
+//  https://github.com/jakobhoeg/nextjs-ollama-llm-ui/tree/master/src/app/api/model
