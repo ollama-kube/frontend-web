@@ -22,34 +22,37 @@
 
 
 #   Step 1: Create base image
-FROM node:lts-alpine AS BASE
+FROM node:lts-alpine AS base
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 
 #   Step 2: Create Development image
-FROM BASE AS DEV
-COPY --from=BASE /usr/src/app .
-COPY bootstrap.sh .
-RUN chmod +x bootstrap.sh
-RUN ./bootstrap.sh
-RUN npm run dev
+FROM base AS dev
+COPY --from=base /usr/src/app .
+COPY ./.git .
+#   COPY ~/.ssh/id_* /etc/ssh
+RUN apk add --no-cache \
+    git \
+    openssh
+CMD ["sh", "-c", "while sleep 3600; do :; done"]
+#   RUN npm run dev
 
 #   Step 3: Staging environment
 #   Is it good practice to run unit tests here?
-FROM BASE AS STAGING
-COPY --from=BASE /usr/src/app .
-RUN npm run build
+#   FROM base AS staging
+#   COPY --from=BASE /usr/src/app .
+#   RUN npm run build
 
 #   Step 2C: Production environment
-FROM STAGING AS PROD
-WORKDIR /usr/src/app
-COPY --from=STAGING /usr/src/app .
-RUN npm ci --only=production
+#   FROM staging AS prod
+#   WORKDIR /usr/src/app
+#   COPY --from=STAGING /usr/src/app .
+#   RUN npm ci --only=production
 
 #   Expose the necessary port
 EXPOSE 3000
 
 #   Start the application
-CMD ["npm", "start"]
+#   CMD ["npm", "start"]

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: localhost:5000/web:dev
+        ports:
+        - containerPort: 3000
+      #   volumeMounts:
+      #   - name: ssh-keys
+      #     mountPath: /root/.ssh
+      #     readOnly: true
+      # volumes:
+      # - name: ssh-keys
+      #   secret:
+      #     secretName: ssh-keys
+      #     items:
+      #       - key: id_rsa
+      #         path: id_rsa
+      #       - key: id_rsa.pub
+      #         path: id_rsa.pub
