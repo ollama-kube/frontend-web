@@ -31,8 +31,6 @@ COPY . .
 #   Step 2: Create Development image
 FROM base AS dev
 COPY --from=base /usr/src/app .
-COPY ./.git .
-#   COPY ~/.ssh/id_* /etc/ssh
 RUN apk add --no-cache \
     git \
     openssh
